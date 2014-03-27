@@ -1,3 +1,4 @@
 redis
 flask
 flask_sockets
+gunicorn
