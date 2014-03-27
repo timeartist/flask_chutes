@@ -6,7 +6,7 @@
        var ws = new WebSocket("ws://localhost:8000/chutes");
        ws.onopen = function() {
            //ws.send("{\"channel\": \"test\"}");
-           ws.send(JSON.stringify({"channel":"movieclips"}));
+           ws.send(JSON.stringify({"channel":"MY_CHANNEL"}));
        };
        ws.onmessage = function(e) {
             $('#messages').append('<br>Received :' + JSON.parse(e.data)['data']);
