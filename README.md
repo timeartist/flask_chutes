@@ -53,6 +53,9 @@ Redis/Socket.IO Pipeline Mixin for Flask
      send_response_to_chute('MY_CHANNEL', {'my':'data'}, **{'host':'redis-host', 'db':0, 'timeout':90})
 
 
+### Running the Server
+
+     gunicorn -k flask_sockets.worker example:app
 
 Adapted from https://github.com/kennethreitz/flask-sockets.
 
