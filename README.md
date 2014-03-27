@@ -39,6 +39,23 @@ Redis/Socket.IO Pipeline Mixin for Flask
         </div>
       </body>
     </html>
+    
+    
+### A-Sync Worker
 
+     from flask_chutes import Chute
+     chute = Chute('MY_CHANNEL', **{'host':'redis-host', 'db':0})
+     chute.send({'my':'data'})
+
+#### or
+
+     from flask_chutes import send_response_to_chute
+     send_response_to_chute('MY_CHANNEL', {'my':'data'}, **{'host':'redis-host', 'db':0, 'timeout':90})
+
+
+
+Adapted from https://github.com/kennethreitz/flask-sockets.
+
+Note, this is a one to one style communication - it's not a pub/sub model.  Each client will likely need their own uniqued channel name.  I'm looking to add the pub/sub version in, but I need to figure out a better way to handle socket closures.
 
     
