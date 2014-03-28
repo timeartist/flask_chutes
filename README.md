@@ -44,6 +44,7 @@ Redis/Socket.IO Pipeline Mixin for Flask
 
      from flask_chutes import Chute
      chute = Chute('MY_CHANNEL', **{'host':'redis-host', 'db':0})
+     
      chute.send({'my':'data'}) # 1->1 messaging
      chute.publish({'my':'data') # 1->many messaging
 
