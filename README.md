@@ -48,9 +48,6 @@ Redis/Socket.IO Pipeline Mixin for Flask
      chute.send({'my':'data'}) # 1->1 messaging
      chute.publish({'my':'data') # 1->many messaging
 
-     for msg in chute.listen():
-          #process message
-          
 ### Running the Server
 
      gunicorn -k flask_sockets.worker example:app
