@@ -8,12 +8,6 @@ from geventwebsocket.exceptions import WebSocketError
 
 processes = {}
 
-def socket_sentinel(ws, ps):
-    for msg in ps.listen():
-        print msg
-        if msg and isinstance(msg.get('data'), (str, unicode)):
-            ws.send(msg['data'])
-        
 def enable_chutes(app):
     '''
     Factory method to add the chutes socket endpoint to your existing Flask app
@@ -38,7 +32,7 @@ def enable_chutes(app):
             i = 0
             redis_key = None
             channel = None
-    
+            
             while True:
                 
                 if i == 0:
@@ -48,8 +42,7 @@ def enable_chutes(app):
                     channel = sign_on['channel']
                     if channel not in processes:
                         processes[channel] = []
-                        
-                    
+
                     redis_key = 'c:%s'%channel
                     i += 1
                     
@@ -71,10 +64,9 @@ def enable_chutes(app):
                     ws.send(resp[-1])
                 else:
                     ws.send(dumps({'data':None}))
+                    
         except WebSocketError, e:
-            print dir(e)
-            _processes = processes[channel]
-            
+            _processes = processes[channel]            
             for process in _processes:
                 process.kill()
 
@@ -84,7 +76,6 @@ class Chute(object):
         self.channel = channel
         self._r_key = 'c:%s'%channel
         
-    
     def send(self, data, timeout=90):
         self.r.lpush(self._r_key, dumps({'data':data}))
         self.r.expire(self._r_key, timeout)
@@ -92,11 +83,17 @@ class Chute(object):
     def publish(self, data):
         self.r.publish(self._r_key, dumps({'data':data}))
     
-            
-
+    
 def send_response_to_chute(channel, data, **kwargs):
     r = StrictRedis(**kwargs)
     r_key = 'c:%s'%channel
     r.lpush(r_key, dumps({'data':data}))
     r.expire(r_key, kwargs.pop('timeout', 90))
     
+
+def socket_sentinel(ws, ps):
+    for msg in ps.listen():
+        print msg
+        if msg and isinstance(msg.get('data'), (str, unicode)):
+            ws.send(msg['data'])
+        
