@@ -23,7 +23,6 @@ Redis/Socket.IO Pipeline Mixin for Flask
         <script type="text/javascript">
            var ws = new WebSocket("ws://localhost:8000/chutes");
            ws.onopen = function() {
-               //ws.send("{\"channel\": \"test\"}");
                ws.send(JSON.stringify({"channel":"MY_CHANNEL"}));
            };
            ws.onmessage = function(e) {
@@ -45,14 +44,12 @@ Redis/Socket.IO Pipeline Mixin for Flask
 
      from flask_chutes import Chute
      chute = Chute('MY_CHANNEL', **{'host':'redis-host', 'db':0})
-     chute.send({'my':'data'})
+     chute.send({'my':'data'}) # 1->1 messaging
+     chute.publish({'my':'data') # 1->many messaging
 
-#### or
-
-     from flask_chutes import send_response_to_chute
-     send_response_to_chute('MY_CHANNEL', {'my':'data'}, **{'host':'redis-host', 'db':0, 'timeout':90})
-
-
+     for msg in chute.listen():
+          #process message
+          
 ### Running the Server
 
      gunicorn -k flask_sockets.worker example:app
