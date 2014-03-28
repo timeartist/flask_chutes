@@ -83,12 +83,13 @@ class Chute(object):
     def publish(self, data):
         self.r.publish(self._r_key, dumps({'data':data}))
     
+    def listen(self):
+        ps = self.r.pubsub()
+        ps.subscribe(channel)
+        
+        for item in ps.listen():
+            yield item
     
-def send_response_to_chute(channel, data, **kwargs):
-    r = StrictRedis(**kwargs)
-    r_key = 'c:%s'%channel
-    r.lpush(r_key, dumps({'data':data}))
-    r.expire(r_key, kwargs.pop('timeout', 90))
     
 
 def socket_sentinel(ws, ps):
