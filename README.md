@@ -57,6 +57,4 @@ Redis/Socket.IO Pipeline Mixin for Flask
 
 Adapted from https://github.com/kennethreitz/flask-sockets.
 
-Note, this is a one to one style communication - it's not a pub/sub model.  Each client will likely need their own uniqued channel name.  I'm looking to add the pub/sub version in, but I need to figure out a better way to handle socket closures.
-
     
