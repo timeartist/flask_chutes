@@ -77,21 +77,21 @@ def enable_chutes(app):
             
             for process in _processes:
                 process.kill()
-                
-                
-    
-
 
 class Chute(object):
     def __init__(self, channel, **kwargs):
         self.r = StrictRedis(**kwargs)
         self.channel = channel
-        self._r_key = 'chutes:%s'%channel
+        self._r_key = 'c:%s'%channel
         
     
     def send(self, data, timeout=90):
         self.r.lpush(self._r_key, dumps({'data':data}))
         self.r.expire(self._r_key, timeout)
+        
+    def publish(self, data):
+        self.r.publish(self._r_key, dumps({'data':data}))
+    
             
 
 def send_response_to_chute(channel, data, **kwargs):
