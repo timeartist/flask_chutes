@@ -48,7 +48,11 @@ def enable_chutes(app):
                     
                     ps = r.pubsub()
                     ps.subscribe(redis_key)
-                    process = Greenlet(socket_sentinel, *(ws, ps))
+                    process = Greenlet(socket_sentinel_publish, *(ws, ps))
+                    process.start()
+                    processes[channel].append(process)
+                    
+                    process = Greenlet(socket_sentinel_client_listener, *(ws, r, redis_key))
                     process.start()
                     processes[channel].append(process)
                     
@@ -77,11 +81,11 @@ class Chute(object):
         self._r_key = 'c:%s'%channel
         
     def send(self, data, timeout=90):
-        self.r.lpush(self._r_key, dumps({'data':data}))
+        self.r.lpush(self._r_key, data)
         self.r.expire(self._r_key, timeout)
         
     def publish(self, data):
-        self.r.publish(self._r_key, dumps({'data':data}))
+        self.r.publish(self._r_key, data)
     
     def listen(self):
         ps = self.r.pubsub()
@@ -92,9 +96,14 @@ class Chute(object):
     
     
 
-def socket_sentinel(ws, ps):
+def socket_sentinel_publish(ws, ps):
     for msg in ps.listen():
         print msg
-        if msg and isinstance(msg.get('data'), (str, unicode)):
-            ws.send(msg['data'])
-        
+        if msg:
+            ws.send(msg)
+
+def socket_sentinel_client_listener(ws, r, channel):
+    while True:
+        msg = ws.receive()
+        print msg
+        r.publish(channel, msg)

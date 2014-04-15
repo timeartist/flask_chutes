@@ -3,21 +3,30 @@
   <head>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
     <script type="text/javascript">
-       var ws = new WebSocket("ws://localhost:8000/chutes");
-       ws.onopen = function() {
-           //ws.send("{\"channel\": \"test\"}");
-           ws.send(JSON.stringify({"channel":"MY_CHANNEL"}));
-       };
-       ws.onmessage = function(e) {
-            $('#messages').append('<br>Received :' + JSON.parse(e.data)['data']);
-       }
-       ws.onclose = function(evt) {
-           alert("socket closed");
-       };
+        var ws = new WebSocket("ws://localhost:8000/chutes");
+        ws.onopen = function() {
+            //ws.send("{\"channel\": \"test\"}");
+            ws.send(JSON.stringify({"channel":"MY_CHANNEL"}));
+        };
+        ws.onmessage = function(e) {
+             $('#messages').append('<br>Received :' + e.data);
+        }
+        ws.onclose = function(evt) {
+            alert("socket closed");
+        };
+        
+        var submit = function() {
+            alert("You submitted");
+            ws.emit(JSON.stringify({'foo':'bar'}));
+            
+        }
+       
+        
     </script>
   </head>
   <body>
     <div id="messages">
     </div>
+        <input type="submit" value="Press Me" onclick="submit()"/>
   </body>
 </html>
