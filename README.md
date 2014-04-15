@@ -27,7 +27,7 @@ Redis/Socket.IO Pipeline Mixin for Flask
                ws.send(JSON.stringify({"channel":"MY_CHANNEL"}));
            };
            ws.onmessage = function(e) {
-                $('#messages').append('<br>Received :' + JSON.parse(e.data)['data']);
+                $('#messages').append('<br>Received :' + e.data);
            }
            ws.onclose = function(evt) {
                alert("socket closed");
