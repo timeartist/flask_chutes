@@ -100,7 +100,7 @@ def socket_sentinel_publish(ws, ps):
     for msg in ps.listen():
         print msg
         if msg:
-            ws.send(msg)
+            ws.send(msg['data'])
 
 def socket_sentinel_client_listener(ws, r, channel):
     while True:
