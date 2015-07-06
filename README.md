@@ -1,8 +1,6 @@
 flask_chutes
 ============
 
-**IMPORTANT: This is pre-release.  I'm not guaranteeing that all changes will be backwards compatable.  I'll update when I have a production grade release ready.**
-
 Redis/Socket.IO Pipeline Mixin for Flask
 
 ###Server
