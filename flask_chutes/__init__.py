@@ -8,7 +8,7 @@ from geventwebsocket.exceptions import WebSocketError
 
 processes = {}
 
-def enable_chutes(app):
+def enable_chutes(app, endpoint='/chutes'):
     '''
     Factory method to add the chutes socket endpoint to your existing Flask app
     
@@ -25,7 +25,7 @@ def enable_chutes(app):
     r = StrictRedis(**connection)
     sockets = Sockets(app)
     
-    @sockets.route('/chutes')
+    @sockets.route(endpoint)
     def _chutes(ws):
         try:
             
